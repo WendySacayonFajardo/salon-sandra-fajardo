@@ -4,9 +4,9 @@ const ServicioReportesController = require('../controllers/servicioReportesContr
 
 // Rutas para reportes de servicios
 router.get('/estadisticas-generales', ServicioReportesController.obtenerEstadisticasGenerales);
-router.get('/mas-solicitados', ServicioReportesController.obtenerServiciosMasSolicitados);
-router.get('/distribucion', ServicioReportesController.obtenerDistribucionServicios);
-router.get('/analisis-precios', ServicioReportesController.obtenerAnalisisPrecios);
-router.get('/por-tipo-cliente', ServicioReportesController.obtenerServiciosPorTipoCliente);
+router.get('/por-servicio', ServicioReportesController.obtenerEstadisticasPorServicio);
+router.get('/mensuales', ServicioReportesController.obtenerEstadisticasMensuales);
+router.get('/mas-rentables', ServicioReportesController.obtenerServiciosMasRentables);
+router.get('/tendencias-diarias', ServicioReportesController.obtenerTendenciasDiarias);
 
 module.exports = router;
