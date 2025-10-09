@@ -1,29 +1,25 @@
-// Configuración de la base de datos MySQL
-const mysql = require('mysql2/promise');
+// Configuración de la base de datos PostgreSQL
+const { Pool } = require('pg');
 require('dotenv').config();
 
 // Configuración de la conexión
 const dbConfig = {
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || 'salon_sf',
-  port: process.env.DB_PORT || 3306,
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-  acquireTimeout: 60000,
+  connectionString: process.env.DATABASE_URL || `postgresql://${process.env.DB_USER || 'salon_user'}:${process.env.DB_PASSWORD || ''}@${process.env.DB_HOST || 'localhost'}:${process.env.DB_PORT || 5432}/${process.env.DB_NAME || 'salon_sf'}`,
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+  max: 10,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
 };
 
 // Crear pool de conexiones
-const db = mysql.createPool(dbConfig);
+const db = new Pool(dbConfig);
 
 // Función para probar la conexión
 const testConnection = async () => {
   try {
-    const connection = await db.getConnection();
+    const client = await db.connect();
     console.log('✅ Conexión a la base de datos establecida correctamente');
-    connection.release();
+    client.release();
     return true;
   } catch (error) {
     console.error('❌ Error conectando a la base de datos:', error.message);
@@ -34,8 +30,8 @@ const testConnection = async () => {
 // Función para ejecutar consultas
 const executeQuery = async (query, params = []) => {
   try {
-    const [rows] = await db.execute(query, params);
-    return rows;
+    const result = await db.query(query, params);
+    return result.rows;
   } catch (error) {
     console.error('Error ejecutando consulta:', error);
     throw error;
