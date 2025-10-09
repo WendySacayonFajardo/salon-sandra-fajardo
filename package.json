@@ -11,10 +11,19 @@
     "build": "cd backend && npm run build",
     "start": "cd backend && npm start"
   },
-  "keywords": ["tienda", "ecommerce", "react", "nodejs", "vite"],
+  "keywords": [
+    "tienda",
+    "ecommerce",
+    "react",
+    "nodejs",
+    "vite"
+  ],
   "author": "Tu Nombre",
   "license": "MIT",
   "devDependencies": {
     "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "pg": "^8.16.3"
   }
 }
