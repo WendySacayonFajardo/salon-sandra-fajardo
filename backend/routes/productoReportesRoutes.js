@@ -1,7 +1,7 @@
 // Rutas para reportes y estadísticas de productos
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const ProductoReportesController = require('../controllers/productoReportesController');
+import ProductoReportesController from '../controllers/productoReportesController.js';
 
 // ===== RUTAS DE REPORTES =====
 
@@ -20,4 +20,4 @@ router.get('/stock-bajo', ProductoReportesController.obtenerProductosStockBajo);
 // GET /api/productos/reportes/analisis-precios
 router.get('/analisis-precios', ProductoReportesController.obtenerAnalisisPrecios);
 
-module.exports = router;
+export default router;

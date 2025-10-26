@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const CarritoController = require('../controllers/carritoController');
+import CarritoController from '../controllers/carritoController.js';
 
 // ===== RUTAS DEL CARRITO =====
 
@@ -58,4 +58,4 @@ router.post('/:cliente_id/checkout', validarClienteId, (req, res, next) => {
   return CarritoController.procesarCheckout(req, res, next);
 });
 
-module.exports = router;
+export default router;

@@ -1,8 +1,8 @@
 // Middleware de logging
 // Este archivo maneja el registro de actividades, errores y monitoreo del sistema
 
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 
 // Configuración JWT
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret_change_in_production';
@@ -151,9 +151,9 @@ const verificarRol = (rol) => {
   };
 };
 
-module.exports = {
+export {
   verificarToken,
-  verificarAdmin,         // ✅ ya apunta a la función correcta
+  verificarAdmin,
   verificarTokenOpcional,
   verificarRol
 };

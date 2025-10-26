@@ -1,45 +1,42 @@
-// Configuración de la base de datos PostgreSQL
-const { Pool } = require('pg');
-require('dotenv').config();
+import mysql from 'mysql2/promise';
+import dotenv from 'dotenv';
+dotenv.config();
 
-// Configuración de la conexión
-const dbConfig = {
-  connectionString: process.env.DATABASE_URL || `postgresql://${process.env.DB_USER || 'salon_user'}:${process.env.DB_PASSWORD || ''}@${process.env.DB_HOST || 'localhost'}:${process.env.DB_PORT || 5432}/${process.env.DB_NAME || 'salon_sf'}`,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
-  max: 10,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
-};
+// Crear pool de conexiones para mejor manejo
+const db = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: Number(process.env.DB_PORT), // ✅ AHORA SÍ USANDO EL PUERTO DE RAILWAY
+  waitForConnections: true,
+  connectionLimit: 5,
+  queueLimit: 0,
+  ssl: {
+    rejectUnauthorized: false // ✅ Railway requiere SSL en muchos casos
+  },
+  connectTimeout: 10000
+});
 
-// Crear pool de conexiones
-const db = new Pool(dbConfig);
-
-// Función para probar la conexión
-const testConnection = async () => {
+// Probar la conexión
+async function testConnection() {
   try {
-    const client = await db.connect();
-    console.log('✅ Conexión a la base de datos establecida correctamente');
-    client.release();
-    return true;
-  } catch (error) {
-    console.error('❌ Error conectando a la base de datos:', error.message);
-    return false;
-  }
-};
+    console.log("🔄 Intentando conectar a MySQL...");
+    console.log("📍 Host:", process.env.DB_HOST);
+    console.log("🔌 Puerto:", process.env.DB_PORT);
+    console.log("👤 Usuario:", process.env.DB_USER);
+    console.log("🗄 BD:", process.env.DB_NAME);
 
-// Función para ejecutar consultas
-const executeQuery = async (query, params = []) => {
-  try {
-    const result = await db.query(query, params);
-    return result.rows;
+    const connection = await db.getConnection();
+    console.log("✅ Conexión a MySQL exitosa");
+    connection.release();
   } catch (error) {
-    console.error('Error ejecutando consulta:', error);
-    throw error;
+    console.error("❌ Error conectando a MySQL");
+    console.error("   Código:", error.code);
+    console.error("   Mensaje:", error.message);
   }
-};
+}
 
-module.exports = {
-  db,
-  testConnection,
-  executeQuery
-};
+testConnection();
+
+export { db };

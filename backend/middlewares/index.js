@@ -2,15 +2,15 @@
 // Este archivo exporta todos los middlewares organizados para facilitar su importación
 
 // Middlewares de autenticación
-const {
+import {
   verificarToken,
   verificarAdmin,
   verificarTokenOpcional,
   verificarRol
-} = require('./authMiddleware');
+} from './authMiddleware.js';
 
 // Middlewares de seguridad
-const {
+import {
   corsConfig,
   helmetConfig,
   apiRateLimiter,
@@ -19,33 +19,28 @@ const {
   sanitizeInput,
   validatePayloadSize,
   validateOrigin
-} = require('./securityMiddleware');
+} from './securityMiddleware.js';
 
 // Middlewares de validación
-const {
+import {
   procesarValidacion,
   validacionesAuth,
   validacionesProductos,
   validacionesCitas,
   validacionesParams,
   validacionesQuery
-} = require('./validationMiddleware');
+} from './validationMiddleware.js';
 
 // Middlewares de logging
-const {
-  logRequests,
-  logResponses,
-  logAuth,
-  logAdminActivity,
-  logErrors,
-  logSecurity,
-  cleanupLogs,
-  writeLogToFile,
-  getClientIP
-} = require('./loggingMiddleware');
+import {
+  verificarToken as logVerificarToken,
+  verificarAdmin as logVerificarAdmin,
+  verificarTokenOpcional as logVerificarTokenOpcional,
+  verificarRol as logVerificarRol
+} from './loggingMiddleware.js';
 
 // Middlewares de manejo de errores
-const {
+import {
   manejarErrores,
   manejarRutasNoEncontradas,
   manejarMetodosNoPermitidos,
@@ -56,10 +51,10 @@ const {
   requerirAdmin,
   enviarRespuestaExito,
   enviarRespuestaError
-} = require('./errorMiddleware');
+} from './errorMiddleware.js';
 
 // Exportar todos los middlewares organizados por categoría
-module.exports = {
+export default {
   // Autenticación
   auth: {
     verificarToken,
@@ -92,15 +87,10 @@ module.exports = {
   
   // Logging
   logging: {
-    logRequests,
-    logResponses,
-    logAuth,
-    logAdminActivity,
-    logErrors,
-    logSecurity,
-    cleanupLogs,
-    writeLogToFile,
-    getClientIP
+    verificarToken: logVerificarToken,
+    verificarAdmin: logVerificarAdmin,
+    verificarTokenOpcional: logVerificarTokenOpcional,
+    verificarRol: logVerificarRol
   },
   
   // Manejo de errores

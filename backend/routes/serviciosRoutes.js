@@ -1,7 +1,7 @@
 // Rutas para servicios y combos - Conectadas a base de datos MySQL del Salón Sandra Fajardo
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const ServicioController = require('../controllers/servicioController');
+import ServicioController from '../controllers/servicioController.js';
 
 // ===== RUTAS PÚBLICAS =====
 
@@ -17,7 +17,7 @@ router.get('/:id', ServicioController.obtenerServicioPorId);
 // GET /api/servicios/combos/:id - Obtener un combo por ID
 router.get('/combos/:id', ServicioController.obtenerComboPorId);
 
-module.exports = router;
+export default router;
 
 
 

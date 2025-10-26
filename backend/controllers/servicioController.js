@@ -1,5 +1,5 @@
 // Controlador para manejar las operaciones de servicios y combos
-const ServicioModel = require('../models/servicioModel');
+import ServicioModel from '../models/servicioModel.js';
 
 class ServicioController {
   
@@ -122,4 +122,4 @@ class ServicioController {
   }
 }
 
-module.exports = ServicioController;
+export default ServicioController;

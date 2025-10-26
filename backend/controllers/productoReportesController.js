@@ -1,5 +1,5 @@
 // Controlador para reportes y estadísticas de productos
-const db = require('../database/ConexionBDD');
+import db from '../database/ConexionBDD.js';
 
 class ProductoReportesController {
   
@@ -215,4 +215,4 @@ class ProductoReportesController {
   }
 }
 
-module.exports = ProductoReportesController;
+export default ProductoReportesController;

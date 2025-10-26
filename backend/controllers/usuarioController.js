@@ -1,10 +1,11 @@
 // Importamos el modelo de usuario, bcrypt para hash de contraseñas y jwt para tokens
-const Usuario = require('../models/usuarioModel');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+import Usuario from '../models/usuarioModel.js';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 /*** Obtener todos los usuarios,  GET /api/usuarios */
-exports.obtenerUsuarios = (req, res) => {
+// Obtener todos los usuarios
+const obtenerUsuarios = (req, res) => {
   // Llama a la función getAll del modelo para traer todos los usuarios
   Usuario.getAll((err, results) => {
     if (err) return res.status(500).json({ error: err }); // Error en la consulta
@@ -13,7 +14,8 @@ exports.obtenerUsuarios = (req, res) => {
 };
 
 /*** Crear un nuevo usuario, POST /api/usuarios/crear */
-exports.crearUsuario = async (req, res) => {
+// Crear nuevo usuario
+const crearUsuario = async (req, res) => {
   try {
     const { nombre, email, password } = req.body;
 
@@ -48,3 +50,8 @@ exports.crearUsuario = async (req, res) => {
 };
 
 // Login de administrador - MOVIDO A server.js para simplificar el sistema
+
+export default {
+  obtenerUsuarios,
+  crearUsuario
+};

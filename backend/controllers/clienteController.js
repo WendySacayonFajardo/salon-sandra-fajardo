@@ -1,8 +1,9 @@
 // Controlador para gestión de clientes unificados
-const { db } = require('../config/database');
+import { db } from '../config/database.js';
 
 // Obtener todos los clientes unificados (de citas + tabla clientes)
-exports.obtenerClientesUnificados = async (req, res) => {
+// Obtener todos los clientes unificados (de citas + tabla clientes)
+const obtenerClientesUnificados = async (req, res) => {
   try {
     console.log('👥 Obteniendo clientes unificados...');
     
@@ -11,8 +12,8 @@ exports.obtenerClientesUnificados = async (req, res) => {
       SELECT 
         c.nombre_cliente,
         c.apellidos_cliente,
-        c.telefono_cliente,
-        c.email_cliente,
+        c.telefono,
+        c.correo,
         COUNT(*) as total_citas,
         COUNT(CASE WHEN c.estado = 'Completada' THEN 1 END) as citas_completadas,
         COUNT(CASE WHEN c.estado = 'Cancelada' THEN 1 END) as citas_canceladas,
@@ -26,19 +27,20 @@ exports.obtenerClientesUnificados = async (req, res) => {
       WHERE c.estado != 'Eliminada'
         AND c.nombre_cliente IS NOT NULL
         AND c.nombre_cliente != ''
-      GROUP BY c.nombre_cliente, c.apellidos_cliente, c.telefono_cliente, c.email_cliente
+      GROUP BY c.nombre_cliente, c.apellidos_cliente, c.telefono, c.correo
       ORDER BY total_citas DESC, ultima_cita DESC
     `;
 
     const result = await db.query(query);
+    console.log('Resultado de la consulta:', result);
 
     res.json({
       success: true,
-      data: result.rows.map(row => ({
+      data: result.map(row => ({
         nombre: row.nombre_cliente,
         apellidos: row.apellidos_cliente,
-        telefono: row.telefono_cliente,
-        email: row.email_cliente,
+        telefono: row.telefono,
+        email: row.correo,
         total_citas: parseInt(row.total_citas),
         citas_completadas: parseInt(row.citas_completadas),
         citas_canceladas: parseInt(row.citas_canceladas),
@@ -64,7 +66,7 @@ exports.obtenerClientesUnificados = async (req, res) => {
 };
 
 // Obtener estadísticas generales de clientes
-exports.obtenerEstadisticasClientes = async (req, res) => {
+const obtenerEstadisticasClientes = async (req, res) => {
   try {
     console.log('📊 Obteniendo estadísticas de clientes...');
 
@@ -121,7 +123,7 @@ exports.obtenerEstadisticasClientes = async (req, res) => {
 };
 
 // Obtener clientes más frecuentes
-exports.obtenerClientesMasFrecuentes = async (req, res) => {
+const obtenerClientesMasFrecuentes = async (req, res) => {
   try {
     console.log('👥 Obteniendo clientes más frecuentes...');
 
@@ -174,7 +176,7 @@ exports.obtenerClientesMasFrecuentes = async (req, res) => {
 };
 
 // Obtener clientes por período
-exports.obtenerClientesPorPeriodo = async (req, res) => {
+const obtenerClientesPorPeriodo = async (req, res) => {
   try {
     const { periodo } = req.params;
     console.log(`📅 Obteniendo clientes del período: ${periodo}`);
@@ -253,7 +255,7 @@ exports.obtenerClientesPorPeriodo = async (req, res) => {
 };
 
 // Obtener análisis de retención de clientes
-exports.obtenerAnalisisRetencion = async (req, res) => {
+const obtenerAnalisisRetencion = async (req, res) => {
   try {
     console.log('📊 Obteniendo análisis de retención de clientes...');
 
@@ -315,7 +317,7 @@ exports.obtenerAnalisisRetencion = async (req, res) => {
 };
 
 // Obtener tendencias de clientes por mes
-exports.obtenerTendenciasClientesMensuales = async (req, res) => {
+const obtenerTendenciasClientesMensuales = async (req, res) => {
   try {
     console.log('📊 Obteniendo tendencias de clientes mensuales...');
 
@@ -363,4 +365,13 @@ exports.obtenerTendenciasClientesMensuales = async (req, res) => {
       error: error.message
     });
   }
+};
+
+export default {
+  obtenerClientesUnificados,
+  obtenerEstadisticasClientes,
+  obtenerClientesMasFrecuentes,
+  obtenerClientesPorPeriodo,
+  obtenerAnalisisRetencion,
+  obtenerTendenciasClientesMensuales
 };

@@ -8,16 +8,15 @@ USE salon_sf;
 -- INSERTAR SERVICIOS CON PRECIOS REALES
 -- =============================
 INSERT INTO servicios (nombre, descripcion, precio_base) VALUES
-('Nanoplastía (alisado)', 'Alisado profesional según largo y grosor del cabello - Duración: 5 a 8 horas', 925.00),
+('Nanoplastía (alisado)', 'Alisado profesional según largo y grosor del cabello - Duración: 5 a 8 horas', 1300.00),
 ('Corte', 'Corte profesional adaptado a tu estilo - Duración: 45 minutos', 150.00),
 ('Baño de color (tinte)', 'Coloración profesional con productos de calidad - Duración: 2 horas', 300.00),
-('Diseño de color (mechas y balayage)', 'Técnicas avanzadas de coloración - Duración: 5 a 7 horas', 650.00),
+('Diseño de color (mechas y balayage)', 'Técnicas avanzadas de coloración - Duración: 5 a 7 horas', 800.00),
 ('Pedicure', 'Pedicure completo con esmaltado - Duración: 1 hora', 150.00),
-('Tratamientos capilares', 'Tratamiento reparador para cabello dañado - Duración: 2 horas', 350.00),
-('Manicure', 'Manicure completo con esmaltado', 120.00);
+('Tratamientos capilares', 'Tratamiento reparador para cabello dañado - Duración: 2 horas', 350.00);
 
 -- =============================
--- INSERTAR COMBOS CON PRECIOS REALES
+-- INSERTAR COMBOS CON PRECIOS REALES  
 -- =============================
 INSERT INTO combos (nombre, descripcion, precio_combo) VALUES
 ('Baño de color + tratamiento + peinado', 'Combo completo de coloración con tratamiento y peinado - Duración: 2 horas', 300.00),
@@ -30,6 +29,8 @@ INSERT INTO categorias (nombre, descripcion) VALUES
 ('Tratamientos', 'Productos especializados para tratamientos capilares'),
 ('Tintes', 'Productos para coloración del cabello'),
 ('Tratamientos Capilares', 'Es una alternativa más suave y sin formol, aporta brillo y sedosidad');
+
+SELECT * FROM categorias;
 -- =============================
 -- INSERTAR PRODUCTOS PROFESIONALES DUE FACETTA
 -- =============================
@@ -54,10 +55,20 @@ INSERT INTO usuarios (nombre, email, contrasena, verificado, rol) VALUES
 -- =============================
 -- INSERTAR CLIENTE ADMINISTRADOR DE PRUEBA
 -- =============================
-INSERT INTO clientes (nombre, apellido, direccion, telefono, correo, tipo_cliente) VALUES
-('Administrador', 'Sistema', 'Dirección del Salón', '+502 1234-5678', 'admin@salonsandra.com', 'Frecuente');
+INSERT INTO clientes (nombre, apellido, direccion, telefono, correo_electronico, tipo_cliente) VALUES
+('Administrador', 'Sistema', 'Dirección del Salón', '+502 1234-5678', 'admin@salonsandra.com', 'Frecuente'),
+('María', 'González', 'Avenida Reforma 123, Zona 9', '1234-5678', 'maria.gonzalez@email.com', 'Frecuente'),
+('Carlos', 'López', 'Calzada Roosevelt 456, Zona 11', '2345-6789', 'carlos.lopez@email.com', 'Nuevo'),
+('Ana', 'Martínez', '5a calle 8-72, Zona 1', '3456-7890', 'ana.martinez@email.com', 'Frecuente'),
+('Pedro', 'Ramírez', '12 calle 6-45, Zona 10', '4567-8901', 'pedro.ramirez@email.com', 'Nuevo'),
+('Laura', 'Hernández', 'Ruta 6 9-21, Zona 4', '5678-9012', 'laura.hernandez@email.com', 'Frecuente'),
+('José', 'Díaz', 'Avenida Las Américas 15-67, Zona 13', '6789-0123', 'jose.diaz@email.com', 'Nuevo'),
+('Sofía', 'Castillo', '8a avenida 12-34, Zona 2', '7890-1234', 'sofia.castillo@email.com', 'Frecuente'),
+('Miguel', 'Vásquez', 'Diagonal 6 12-89, Zona 10', '8901-2345', 'miguel.vasquez@email.com', 'Nuevo'),
+('Elena', 'Morales', 'Calzada San Juan 45-23, Zona 7', '9012-3456', 'elena.morales@email.com', 'Frecuente'),
+('Roberto', 'Silva', 'Boulevard Liberación 78-56, Zona 5', '0123-4567', 'roberto.silva@email.com', 'Nuevo');
 
-USE salon_sf;
+SELECT * FROM clientes;
 
 -- Insertar citas de julio y agosto 2025
 INSERT INTO citas (
@@ -246,8 +257,6 @@ SELECT producto_id, nombre, marca FROM productos ORDER BY producto_id;
 ALTER TABLE productos AUTO_INCREMENT = 1;
 -- Ver el siguiente ID que se generará
 SHOW TABLE STATUS LIKE 'productos';
--- Eliminar todos los productos
-DELETE FROM productos;
 -- Reiniciar el AUTO_INCREMENT para que empiece en 1
 ALTER TABLE productos AUTO_INCREMENT = 1;
 -- Ver el siguiente ID que se generará

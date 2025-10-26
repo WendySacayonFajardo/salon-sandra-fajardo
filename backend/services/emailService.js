@@ -1,8 +1,9 @@
 // Servicio de email para envío de correos de verificación
 // Este archivo maneja toda la configuración y envío de correos electrónicos
 
-const nodemailer = require('nodemailer');
-require('dotenv').config();
+import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+dotenv.config();
 
 // Configuración del transporter de Nodemailer
 // Este objeto se encarga de la conexión con el servidor de email
@@ -34,7 +35,7 @@ const verificarConexion = async () => {
 const enviarCorreoVerificacion = async (email, nombre, token) => {
   try {
     // URL de verificación que se enviará al usuario
-    const urlVerificacion = `${process.env.FRONTEND_URL}/verificar-email?token=${token}`;
+    const urlVerificacion = `http://localhost:5173/verificar-email?token=${token}`;
     
     // Configuración del correo
     const mailOptions = {
@@ -64,7 +65,7 @@ const enviarCorreoVerificacion = async (email, nombre, token) => {
           <div class="container">
             <div class="header">
               <div class="logo-container">
-                <img src="${process.env.BACKEND_URL || 'http://localhost:4000'}/uploads/logo.jpg" alt="Salón Sandra Fajardo" class="logo-img" style="object-fit: cover;">
+                <img src="http://localhost:4000/uploads/logo.jpg" alt="Salón Sandra Fajardo" class="logo-img" style="object-fit: cover;">
                 <div class="logo-text">Salón Sandra Fajardo</div>
               </div>
               <p class="tagline">Belleza y elegancia en cada detalle</p>
@@ -139,7 +140,7 @@ const enviarCorreoBienvenida = async (email, nombre) => {
           <div class="container">
             <div class="header">
               <div class="logo-container">
-                <img src="${process.env.BACKEND_URL || 'http://localhost:4000'}/uploads/logo.jpg" alt="Salón Sandra Fajardo" class="logo-img" style="object-fit: cover;">
+                <img src="http://localhost:4000/uploads/logo.jpg" alt="Salón Sandra Fajardo" class="logo-img" style="object-fit: cover;">
                 <div class="logo-text">Salón Sandra Fajardo</div>
               </div>
               <p class="tagline">Belleza y elegancia en cada detalle</p>
@@ -208,7 +209,7 @@ const enviarCorreoInicioSesion = async (email, nombre, fechaHora) => {
           <div class="container">
             <div class="header">
               <div class="logo-container">
-                <img src="${process.env.BACKEND_URL || 'http://localhost:4000'}/uploads/logo.jpg" alt="Salón Sandra Fajardo" class="logo-img" style="object-fit: cover;">
+                <img src="http://localhost:4000/uploads/logo.jpg" alt="Salón Sandra Fajardo" class="logo-img" style="object-fit: cover;">
                 <div class="logo-text">Salón Sandra Fajardo</div>
               </div>
               <p class="tagline">Belleza y elegancia en cada detalle</p>
@@ -238,7 +239,7 @@ const enviarCorreoInicioSesion = async (email, nombre, fechaHora) => {
               </ul>
               
               <div style="text-align: center;">
-                <a href="${process.env.FRONTEND_URL}" class="btn">Ir a la Tienda en Línea</a>
+                <a href="http://localhost:5173" class="btn">Ir a la Tienda en Línea</a>
               </div>
               
               <p><strong>Consejos de seguridad:</strong></p>
@@ -270,7 +271,7 @@ const enviarCorreoInicioSesion = async (email, nombre, fechaHora) => {
 };
 
 // Exportar las funciones para usar en otros archivos
-module.exports = {
+export {
   verificarConexion,
   enviarCorreoVerificacion,
   enviarCorreoBienvenida,

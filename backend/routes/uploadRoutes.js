@@ -1,8 +1,8 @@
 // Rutas para subir imágenes de productos
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const { uploadImages, processUploadedImages } = require('../middlewares/uploadMiddleware');
-const ProductoModel = require('../models/productoModel');
+import { uploadImages, processUploadedImages } from '../middlewares/uploadMiddleware.js';
+import ProductoModel from '../models/productoModel.js';
 
 // POST /api/upload/producto/:id - Subir imágenes para un producto específico
 router.post('/producto/:id', uploadImages, processUploadedImages, async (req, res) => {
@@ -135,4 +135,4 @@ router.post('/cita', uploadImages, processUploadedImages, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

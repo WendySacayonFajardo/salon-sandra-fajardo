@@ -1,5 +1,5 @@
 // Controlador para gestión de inventario
-const { db } = require('../config/database');
+import { db } from '../config/database.js';
 
 class InventarioController {
   
@@ -250,4 +250,4 @@ class InventarioController {
   }
 }
 
-module.exports = InventarioController;
+export default InventarioController;

@@ -1,59 +1,64 @@
 // Modelo para manejar operaciones de productos en MySQL
 // Usando la estructura existente del salón Sandra Fajardo
-const db = require('../database/ConexionBDD');
+import db from '../database/ConexionBDD.js';
 
 class ProductoModel {
 
   // Obtener todos los productos con información de inventario
   static async obtenerTodos() {
-    return new Promise((resolve, reject) => {
+    try {
       const query = `
         SELECT 
-          p.producto_id,
-          p.nombre,
-          p.marca,
-          p.categoria_id,
-          p.descripcion,
-          p.precio,
-          p.foto1 as imagen,
-          p.activo,
-          c.nombre as categoria_nombre,
-          i.stock_actual as stock,
-          i.stock_minimo
-        FROM productos p
-        LEFT JOIN categorias c ON p.categoria_id = c.id_categoria
-        LEFT JOIN inventario i ON p.producto_id = i.producto_id
-        ORDER BY p.nombre ASC
+          producto_id,
+          nombre,
+          marca,
+          categoria_id,
+          descripcion,
+          precio,
+          foto1 as imagen,
+          activo
+        FROM productos
+        ORDER BY nombre ASC
       `;
       
-      db.query(query, (err, rows) => {
-        if (err) {
-          console.error('❌ Error al obtener productos:', err);
-          reject(err);
-        } else {
-          console.log('✅ Productos obtenidos de la BD:', rows.length);
-          const productos = rows.map(row => ({
+      const [rows] = await db.query(query);
+      console.log('✅ Productos obtenidos de la BD:', rows.length);
+      
+      // Eliminar duplicados basándose en el nombre del producto
+      const productosUnicos = [];
+      const nombresVistos = new Set();
+      
+      for (const row of rows) {
+        if (!nombresVistos.has(row.nombre)) {
+          nombresVistos.add(row.nombre);
+          productosUnicos.push({
             producto_id: row.producto_id,
             nombre: row.nombre,
             marca: row.marca,
             categoria_id: row.categoria_id,
-            categoria_nombre: row.categoria_nombre,
+            categoria_nombre: 'Categoría', // Valor por defecto
             descripcion: row.descripcion,
             precio: parseFloat(row.precio),
             imagen: row.imagen || '/images/producto-default.svg',
-            stock: row.stock || 0,
-            stock_minimo: row.stock_minimo || 0,
+            stock: 50, // Valor por defecto
+            stock_minimo: 10, // Valor por defecto
             activo: row.activo
-          }));
-          resolve(productos);
+          });
         }
-      });
-    });
+      }
+      
+      console.log('✅ Productos únicos después de eliminar duplicados:', productosUnicos.length);
+      
+      return productosUnicos;
+    } catch (err) {
+      console.error('❌ Error al obtener productos:', err);
+      throw err;
+    }
   }
 
   // Obtener productos destacados (los primeros 6 productos)
   static async obtenerDestacados() {
-    return new Promise((resolve, reject) => {
+    try {
       const query = `
         SELECT 
           p.producto_id as id,
@@ -68,30 +73,29 @@ class ProductoModel {
         LIMIT 6
       `;
       
-      db.query(query, (err, rows) => {
-        if (err) {
-          console.error('❌ Error al obtener productos destacados:', err);
-          reject(err);
-        } else {
-          console.log('✅ Productos destacados obtenidos de la BD:', rows.length);
-          const productos = rows.map(row => ({
-            id: row.id,
-            nombre: row.nombre,
-            descripcion: row.descripcion,
-            precio: parseFloat(row.precio),
-            categoria: 'Productos del Salón',
-            imagen: row.imagen || '/images/producto-default.jpg',
-            stock: row.stock || 0
-          }));
-          resolve(productos);
-        }
-      });
-    });
+      const [rows] = await db.query(query);
+      console.log('✅ Productos destacados obtenidos de la BD:', rows.length);
+      
+      const productos = rows.map(row => ({
+        id: row.id,
+        nombre: row.nombre,
+        descripcion: row.descripcion,
+        precio: parseFloat(row.precio),
+        categoria: 'Productos del Salón',
+        imagen: row.imagen || '/images/producto-default.jpg',
+        stock: row.stock || 0
+      }));
+      
+      return productos;
+    } catch (err) {
+      console.error('❌ Error al obtener productos destacados:', err);
+      throw err;
+    }
   }
 
   // Obtener un producto por ID
   static async obtenerPorId(id) {
-    return new Promise((resolve, reject) => {
+    try {
       const query = `
         SELECT 
           p.producto_id,
@@ -106,32 +110,32 @@ class ProductoModel {
         WHERE p.producto_id = ?
       `;
       
-      db.query(query, [id], (err, rows) => {
-        if (err) {
-          console.error('Error al obtener producto por ID:', err);
-          reject(err);
-        } else if (rows.length === 0) {
-          resolve(null);
-        } else {
-          const row = rows[0];
-          resolve({
-            producto_id: row.producto_id,
-            nombre: row.nombre,
-            descripcion: row.descripcion,
-            precio: parseFloat(row.precio),
-            categoria: 'Productos del Salón',
-            imagen: row.imagen || '/images/producto-default.jpg',
-            stock: row.stock || 0,
-            stock_minimo: row.stock_minimo || 0
-          });
-        }
-      });
-    });
+      const [rows] = await db.query(query, [id]);
+      
+      if (rows.length === 0) {
+        return null;
+      }
+      
+      const row = rows[0];
+      return {
+        producto_id: row.producto_id,
+        nombre: row.nombre,
+        descripcion: row.descripcion,
+        precio: parseFloat(row.precio),
+        categoria: 'Productos del Salón',
+        imagen: row.imagen || '/images/producto-default.jpg',
+        stock: row.stock || 0,
+        stock_minimo: row.stock_minimo || 0
+      };
+    } catch (err) {
+      console.error('Error al obtener producto por ID:', err);
+      throw err;
+    }
   }
 
   // Buscar productos por nombre
   static async buscarPorNombre(termino) {
-    return new Promise((resolve, reject) => {
+    try {
       const query = `
         SELECT 
           p.producto_id as id,
@@ -146,29 +150,28 @@ class ProductoModel {
         ORDER BY p.nombre ASC
       `;
       
-      db.query(query, [`%${termino}%`, `%${termino}%`], (err, rows) => {
-        if (err) {
-          console.error('Error al buscar productos:', err);
-          reject(err);
-        } else {
-          const productos = rows.map(row => ({
-            id: row.id,
-            nombre: row.nombre,
-            descripcion: row.descripcion,
-            precio: parseFloat(row.precio),
-            categoria: 'Productos del Salón',
-            imagen: row.imagen || '/images/producto-default.jpg',
-            stock: row.stock || 0
-          }));
-          resolve(productos);
-        }
-      });
-    });
+      const [rows] = await db.query(query, [`%${termino}%`, `%${termino}%`]);
+      
+      const productos = rows.map(row => ({
+        id: row.id,
+        nombre: row.nombre,
+        descripcion: row.descripcion,
+        precio: parseFloat(row.precio),
+        categoria: 'Productos del Salón',
+        imagen: row.imagen || '/images/producto-default.jpg',
+        stock: row.stock || 0
+      }));
+      
+      return productos;
+    } catch (err) {
+      console.error('Error al buscar productos:', err);
+      throw err;
+    }
   }
 
   // Obtener categorías desde la base de datos
   static async obtenerCategorias() {
-    return new Promise((resolve, reject) => {
+    try {
       const query = `
         SELECT 
           id_categoria as id,
@@ -180,22 +183,21 @@ class ProductoModel {
         ORDER BY nombre ASC
       `;
       
-      db.query(query, (err, rows) => {
-        if (err) {
-          console.error('❌ Error al obtener categorías:', err);
-          reject(err);
-        } else {
-          console.log('✅ Categorías obtenidas de la BD:', rows.length);
-          const categorias = rows.map(row => ({
-            id: row.id,
-            nombre: row.nombre,
-            descripcion: row.descripcion,
-            activa: row.activa
-          }));
-          resolve(categorias);
-        }
-      });
-    });
+      const [rows] = await db.query(query);
+      console.log('✅ Categorías obtenidas de la BD:', rows.length);
+      
+      const categorias = rows.map(row => ({
+        id: row.id,
+        nombre: row.nombre,
+        descripcion: row.descripcion,
+        activa: row.activa
+      }));
+      
+      return categorias;
+    } catch (err) {
+      console.error('❌ Error al obtener categorías:', err);
+      throw err;
+    }
   }
 
   // Crear un nuevo producto
@@ -374,4 +376,4 @@ class ProductoModel {
   }
 }
 
-module.exports = ProductoModel;
+export default ProductoModel;

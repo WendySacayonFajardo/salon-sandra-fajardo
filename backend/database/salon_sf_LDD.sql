@@ -1,11 +1,11 @@
 -- =======================================
 -- BASE DE DATOS SALON_SF
 -- =======================================
-CREATE DATABASE IF NOT EXISTS salon_sf;
-USE salon_sf;
 
+USE salon_sf;
+SELECT * FROM citas;
 -- =======================================
--- TABLA USUARIOS (Autenticación)
+-- TABLA USUARIOS (Autenticación) *
 -- =======================================
 CREATE TABLE IF NOT EXISTS usuarios (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
 );
 
 -- =======================================
--- TABLA CLIENTES
+-- TABLA CLIENTES*
 -- =======================================
 CREATE TABLE IF NOT EXISTS clientes (
     cliente_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS clientes (
 );
 
 -- =======================================
--- TABLA SERVICIOS
+-- TABLA SERVICIOS*
 -- =======================================
 CREATE TABLE IF NOT EXISTS servicios (
     servicio_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS servicios (
 );
 
 -- =======================================
--- TABLA CITAS
+-- TABLA CITAS*
 -- =======================================
 CREATE TABLE IF NOT EXISTS citas (
     id_cita INT AUTO_INCREMENT PRIMARY KEY,
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS citas (
 );
 
 -- =======================================
--- TABLA VENTAS
+-- TABLA VENTAS*
 -- =======================================
 CREATE TABLE IF NOT EXISTS ventas (
     id_venta INT AUTO_INCREMENT PRIMARY KEY,
@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS ventas (
     cliente_id INT,
     cliente_nombre VARCHAR(100),
     cliente_email VARCHAR(150),
-    metodo_pago ENUM('Efectivo', 'Transferencia') DEFAULT 'Transferencia',
+    metodo_pago ENUM('Efectivo', 'Transferencia') DEFAULT 'Efectivo',
     estado ENUM('Pendiente', 'Completada', 'Cancelada') DEFAULT 'Pendiente',
     observaciones TEXT,
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS ventas (
 );
 
 -- =======================================
--- TABLA DETALLE VENTAS
+-- TABLA DETALLE VENTAS3*
 -- =======================================
 CREATE TABLE IF NOT EXISTS detalle_ventas (
     id_detalle INT AUTO_INCREMENT PRIMARY KEY,
@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS detalle_ventas (
 );
 
 -- =======================================
--- TABLA VENTA_DETALLES (Para carrito/checkout)
+-- TABLA VENTA_DETALLES (Para carrito/checkout)*
 -- =======================================
 CREATE TABLE IF NOT EXISTS venta_detalles (
     detalle_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -141,7 +141,7 @@ CREATE TABLE IF NOT EXISTS venta_detalles (
 );
 
 -- =======================================
--- TABLA MOVIMIENTOS INVENTARIO
+-- TABLA MOVIMIENTOS INVENTARIO*
 -- =======================================
 CREATE TABLE IF NOT EXISTS movimientos_inventario (
     movimiento_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -158,7 +158,7 @@ CREATE TABLE IF NOT EXISTS movimientos_inventario (
 );
 
 -- =======================================
--- TABLA COMBOS
+-- TABLA COMBOS*
 -- =======================================
 CREATE TABLE IF NOT EXISTS combos (
     combo_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -169,7 +169,7 @@ CREATE TABLE IF NOT EXISTS combos (
 
 
 -- =======================================
--- TABLA CATEGORÍAS
+-- TABLA CATEGORÍAS 1*
 -- =======================================
 CREATE TABLE IF NOT EXISTS categorias (
     id_categoria INT AUTO_INCREMENT PRIMARY KEY,
@@ -180,7 +180,7 @@ CREATE TABLE IF NOT EXISTS categorias (
 );
 
 -- =======================================
--- TABLA PRODUCTOS
+-- TABLA PRODUCTOS 2*
 -- =======================================
 CREATE TABLE IF NOT EXISTS productos (
     producto_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -201,7 +201,7 @@ CREATE TABLE IF NOT EXISTS productos (
 );
 
 -- =======================================
--- TABLA INVENTARIO
+-- TABLA INVENTARIO*
 -- =======================================
 CREATE TABLE IF NOT EXISTS inventario (
     inventario_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -357,36 +357,9 @@ BEGIN
 END;
 //
 DELIMITER ;
-
--- =======================================
--- DATOS DE EJEMPLO BÁSICOS
--- =======================================
--- Insertar categorías básicas
-INSERT IGNORE INTO categorias (nombre, descripcion) VALUES
-('Cuidado Capilar', 'Productos para el cuidado del cabello'),
-('Tratamientos', 'Tratamientos especializados para el cabello'),
-('Accesorios', 'Accesorios y herramientas de belleza'),
-('Productos Químicos', 'Tintes, decolorantes y productos químicos');
-
--- Insertar servicios básicos
-INSERT IGNORE INTO servicios (nombre, descripcion, precio_base) VALUES
-('Corte', 'Corte de cabello básico', 50.00),
-('Color', 'Aplicación de color', 80.00),
-('Nanoplastia', 'Tratamiento de nanoplastia', 120.00),
-('Botox', 'Tratamiento botox capilar', 100.00),
-('Pedicure', 'Cuidado de pies', 40.00),
-('Manicure', 'Cuidado de manos', 35.00);
-
--- Insertar usuario administrador por defecto
-INSERT IGNORE INTO usuarios (nombre, email, contrasena, rol, verificado) VALUES
-('Administrador', 'admin@salonsf.com', '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', TRUE);
-
--- =======================================
+-- ====================================
 -- AJUSTES DE INTEGRIDAD PARA CITAS Y SERVICIOS
 -- =======================================
--- Estas sentencias ALTER se incluyen para asegurar relaciones y performance
--- Ejecutar de forma incremental si las tablas ya existen
-
 -- FK: citas.servicio_id → servicios(servicio_id)
 ALTER TABLE citas
   ADD CONSTRAINT fk_citas_servicio
@@ -560,9 +533,4 @@ WHERE fecha_cita >= '2025-07-01' AND fecha_cita <= '2025-08-31'
 GROUP BY MONTH(fecha_cita)
 ORDER BY mes;
 
--- =======================================
--- FIN DEL SCRIPT
--- =======================================
--- Script completo de base de datos para Salón Sandra Fajardo
--- Incluye: tablas, relaciones, índices, procedimientos y datos de ejemplo
--- Última actualización: $(date)
+SELECT * FROM categorias;

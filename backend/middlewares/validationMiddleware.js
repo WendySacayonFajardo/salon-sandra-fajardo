@@ -1,7 +1,7 @@
 // Middleware de validación de datos
 // Este archivo maneja la validación de datos de entrada usando express-validator
 
-const { body, param, query, validationResult } = require('express-validator');
+import { body, param, query, validationResult } from 'express-validator';
 
 /**
  * Middleware para procesar resultados de validación
@@ -277,11 +277,13 @@ const validacionesQuery = {
   ]
 };
 
-module.exports = {
+export {
+
   procesarValidacion,
   validacionesAuth,
   validacionesProductos,
   validacionesCitas,
   validacionesParams,
   validacionesQuery
+
 };

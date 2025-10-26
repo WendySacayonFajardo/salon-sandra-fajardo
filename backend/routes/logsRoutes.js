@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const LogsController = require('../controllers/logsController');
+import LogsController from '../controllers/logsController.js';
 
 // Obtener estadísticas generales de todos los logs
 router.get('/estadisticas-generales', LogsController.obtenerEstadisticasGenerales);
@@ -17,4 +17,4 @@ router.get('/requests', LogsController.obtenerLogsRequests);
 // Obtener análisis de logs de responses
 router.get('/responses', LogsController.obtenerLogsResponses);
 
-module.exports = router;
+export default router;

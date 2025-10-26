@@ -1,5 +1,5 @@
 // Controlador para gestión del carrito de compras
-const { db } = require('../config/database');
+import { db } from '../config/database.js';
 
 class CarritoController {
   
@@ -684,4 +684,4 @@ class CarritoController {
   }
 }
 
-module.exports = CarritoController;
+export default CarritoController;

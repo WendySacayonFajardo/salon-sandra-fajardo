@@ -1,5 +1,5 @@
 // Controlador para reportes de servicios
-const { db } = require('../config/database');
+import { db } from '../config/database.js';
 
 class ServicioReportesController {
   // Obtener estadísticas generales de servicios
@@ -242,4 +242,4 @@ class ServicioReportesController {
   }
 }
 
-module.exports = ServicioReportesController;
+export default ServicioReportesController;

@@ -1,7 +1,7 @@
-const Venta = require('../models/ventaModel');
+import Venta from '../models/ventaModel.js';
 
 // Obtener todas las ventas
-exports.obtenerVentas = async (req, res) => {
+const obtenerVentas = async (req, res) => {
   try {
     console.log('📊 Obteniendo ventas...');
     
@@ -30,7 +30,7 @@ exports.obtenerVentas = async (req, res) => {
 };
 
 // Obtener ventas por rango de fechas
-exports.obtenerVentasPorFecha = async (req, res) => {
+const obtenerVentasPorFecha = async (req, res) => {
   try {
     const { fechaInicio, fechaFin } = req.query;
     
@@ -68,7 +68,7 @@ exports.obtenerVentasPorFecha = async (req, res) => {
 };
 
 // Obtener detalles de una venta
-exports.obtenerDetallesVenta = async (req, res) => {
+const obtenerDetallesVenta = async (req, res) => {
   try {
     const { id } = req.params;
     
@@ -99,7 +99,7 @@ exports.obtenerDetallesVenta = async (req, res) => {
 };
 
 // Crear nueva venta
-exports.crearVenta = async (req, res) => {
+const crearVenta = async (req, res) => {
   try {
     console.log('💰 Creando nueva venta...');
     console.log('📦 Datos recibidos:', req.body);
@@ -195,7 +195,7 @@ exports.crearVenta = async (req, res) => {
 };
 
 // Obtener estadísticas de ventas
-exports.obtenerEstadisticasVentas = async (req, res) => {
+const obtenerEstadisticasVentas = async (req, res) => {
   try {
     const { periodo } = req.params;
     
@@ -233,7 +233,7 @@ exports.obtenerEstadisticasVentas = async (req, res) => {
 };
 
 // Obtener top productos más vendidos
-exports.obtenerTopProductos = async (req, res) => {
+const obtenerTopProductos = async (req, res) => {
   try {
     const { periodo } = req.params;
     const { limite } = req.query;
@@ -274,7 +274,7 @@ exports.obtenerTopProductos = async (req, res) => {
 };
 
 // Obtener top categorías más vendidas
-exports.obtenerTopCategorias = async (req, res) => {
+const obtenerTopCategorias = async (req, res) => {
   try {
     const { periodo } = req.params;
     
@@ -309,4 +309,15 @@ exports.obtenerTopCategorias = async (req, res) => {
       error: 'Error interno del servidor'
     });
   }
+};
+
+
+export default {
+  obtenerVentas,
+  obtenerVentasPorFecha,
+  obtenerDetallesVenta,
+  crearVenta,
+  obtenerEstadisticasVentas,
+  obtenerTopProductos,
+  obtenerTopCategorias
 };

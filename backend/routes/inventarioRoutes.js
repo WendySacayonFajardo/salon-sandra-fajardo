@@ -1,7 +1,7 @@
 // Rutas para gestión de inventario
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const InventarioController = require('../controllers/inventarioController');
+import InventarioController from '../controllers/inventarioController.js';
 
 // ===== RUTAS DE INVENTARIO =====
 
@@ -23,4 +23,4 @@ router.put('/stock-minimo', InventarioController.actualizarStockMinimo);
 // DELETE /api/inventario/:productoId - Eliminar producto (borrado lógico)
 router.delete('/:productoId', InventarioController.eliminarProductoInventario);
 
-module.exports = router;
+export default router;

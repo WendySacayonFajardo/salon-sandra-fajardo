@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const ventaController = require('../controllers/ventaController');
+import ventaController from '../controllers/ventaController.js';
 
 // Rutas para reportes y estadísticas (deben ir ANTES de las rutas con parámetros)
 router.get('/estadisticas/:periodo', ventaController.obtenerEstadisticasVentas);
@@ -13,4 +13,4 @@ router.get('/por-fecha', ventaController.obtenerVentasPorFecha);
 router.get('/:id/detalles', ventaController.obtenerDetallesVenta);
 router.post('/', ventaController.crearVenta);
 
-module.exports = router;
+export default router;

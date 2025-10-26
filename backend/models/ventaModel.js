@@ -1,4 +1,4 @@
-const db = require('../database/ConexionBDD');
+import db from '../database/ConexionBDD.js';
 
 const Venta = {
   // Obtener todas las ventas
@@ -229,4 +229,4 @@ const Venta = {
   }
 };
 
-module.exports = Venta;
+export default Venta;

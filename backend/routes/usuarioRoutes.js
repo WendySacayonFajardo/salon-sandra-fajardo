@@ -1,8 +1,8 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 
 // Importamos el controller de usuarios
-const UsuarioController = require('../controllers/usuarioController');
+import UsuarioController from '../controllers/usuarioController.js';
 
 // --- Rutas de usuarios ---
 // GET /api/usuarios → obtener todos los usuarios
@@ -14,4 +14,4 @@ router.post('/crear', UsuarioController.crearUsuario);
 // POST /api/auth/admin-login → MOVIDO A server.js para simplificar
 
 // Exportamos las rutas para usar en server.js
-module.exports = router;
+export default router;

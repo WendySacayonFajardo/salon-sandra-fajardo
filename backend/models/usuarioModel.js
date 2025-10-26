@@ -1,4 +1,4 @@
-const db = require('../database/ConexionBDD');
+import db from '../database/ConexionBDD.js';
 
 const Usuario = {
   // Obtener todos los usuarios
@@ -22,4 +22,4 @@ const Usuario = {
   }
 };
 
-module.exports = Usuario;
+export default Usuario;

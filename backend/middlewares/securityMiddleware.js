@@ -1,9 +1,9 @@
 // Middleware de seguridad
 // Este archivo maneja aspectos de seguridad como CORS, rate limiting, sanitización, etc.
 
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
-const expressSanitizer = require('express-sanitizer');
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import expressSanitizer from 'express-sanitizer';
 
 /**
  * Configuración de CORS
@@ -192,7 +192,7 @@ const validateOrigin = (allowedOrigins = []) => {
   };
 };
 
-module.exports = {
+export {
   corsConfig,
   helmetConfig,
   apiRateLimiter,

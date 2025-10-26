@@ -1,5 +1,10 @@
-const fs = require('fs').promises;
-const path = require('path');
+import fs from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Obtener __dirname en ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 class LogsController {
   /**
@@ -26,7 +31,7 @@ class LogsController {
    */
   static async obtenerEstadisticasGenerales(req, res) {
     try {
-      const logsDir = path.join(__dirname, '../logs');
+      const logsDir = path.join(process.cwd(), 'logs');
       
       // Leer todos los archivos de logs
       const [authLogsRaw, errorLogsRaw, requestLogsRaw, responseLogsRaw] = await Promise.all([
@@ -82,7 +87,7 @@ class LogsController {
    */
   static async obtenerLogsAuth(req, res) {
     try {
-      const logsDir = path.join(__dirname, '../logs');
+      const logsDir = path.join(process.cwd(), 'logs');
       const authLogsRaw = await LogsController.leerArchivoLog(path.join(logsDir, 'auth.log'));
       
       // Filtrar logs por año (2024 en adelante)
@@ -139,7 +144,7 @@ class LogsController {
    */
   static async obtenerLogsErrores(req, res) {
     try {
-      const logsDir = path.join(__dirname, '../logs');
+      const logsDir = path.join(process.cwd(), 'logs');
       const errorLogsRaw = await LogsController.leerArchivoLog(path.join(logsDir, 'errors.log'));
       
       // Filtrar logs por año (2024 en adelante)
@@ -199,7 +204,7 @@ class LogsController {
    */
   static async obtenerLogsRequests(req, res) {
     try {
-      const logsDir = path.join(__dirname, '../logs');
+      const logsDir = path.join(process.cwd(), 'logs');
       const requestLogsRaw = await LogsController.leerArchivoLog(path.join(logsDir, 'requests.log'));
       
       // Filtrar logs por año (2024 en adelante)
@@ -263,7 +268,7 @@ class LogsController {
    */
   static async obtenerLogsResponses(req, res) {
     try {
-      const logsDir = path.join(__dirname, '../logs');
+      const logsDir = path.join(process.cwd(), 'logs');
       const responseLogsRaw = await LogsController.leerArchivoLog(path.join(logsDir, 'responses.log'));
       
       // Filtrar logs por año (2024 en adelante)
@@ -345,4 +350,4 @@ class LogsController {
   }
 }
 
-module.exports = LogsController;
+export default LogsController;

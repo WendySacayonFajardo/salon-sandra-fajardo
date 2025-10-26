@@ -1,8 +1,8 @@
 // Middleware para manejar la subida de imágenes de productos
-const multer = require('multer');
-const sharp = require('sharp');
-const path = require('path');
-const fs = require('fs');
+import multer from 'multer';
+import sharp from 'sharp';
+import path from 'path';
+import fs from 'fs';
 
 // Configurar almacenamiento en memoria
 const storage = multer.memoryStorage();
@@ -167,11 +167,13 @@ const processUploadedImages = async (req, res, next) => {
   }
 };
 
-module.exports = {
+export {
+
   uploadImages,
   processUploadedImages,
   processImage,
   uploadCitaImage,
   processCitaUploadedImage,
   processCitaImage
+
 };

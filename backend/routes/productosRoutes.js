@@ -1,9 +1,9 @@
 // Rutas para productos - Conectadas a base de datos MySQL del Salón Sandra Fajardo
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const ProductoController = require('../controllers/productoController');
-const multer = require('multer');
-const path = require('path');
+import ProductoController from '../controllers/productoController.js';
+import multer from 'multer';
+import path from 'path';
 
 // Configuración de multer para subir imágenes
 const storage = multer.diskStorage({
@@ -68,4 +68,4 @@ router.delete('/:id', ProductoController.eliminar);
 // POST /api/productos/:id/imagen - Subir imagen de producto
 router.post('/:id/imagen', upload.single('imagen'), ProductoController.subirImagen);
 
-module.exports = router;
+export default router;

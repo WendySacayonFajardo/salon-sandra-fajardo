@@ -1,9 +1,9 @@
 // Rutas para categorías de productos - Conectadas a base de datos MySQL
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const ProductoController = require('../controllers/productoController');
+import ProductoController from '../controllers/productoController.js';
 
 // GET /api/categorias - Obtener todas las categorías
 router.get('/', ProductoController.obtenerCategorias);
 
-module.exports = router;
+export default router;

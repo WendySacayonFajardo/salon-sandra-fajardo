@@ -1,7 +1,7 @@
-const Cita = require('../models/citaModel');
+import Cita from '../models/citaModel.js';
 
 // Crear nueva cita
-exports.crearCita = async (req, res) => {
+const crearCita = async (req, res) => {
   try {
     console.log('📅 Creando nueva cita...');
     console.log('📦 Datos recibidos:', req.body);
@@ -82,22 +82,24 @@ exports.crearCita = async (req, res) => {
 
     console.log('📝 Creando cita con datos:', nuevaCita);
 
-    Cita.crear(nuevaCita, (err, result) => {
-      if (err) {
-        console.error('❌ Error creando cita:', err);
-        return res.status(500).json({
-          success: false,
-          error: 'Error interno del servidor'
-        });
-      }
-
+    try {
+      const result = await Cita.crear(nuevaCita);
       console.log('✅ Cita creada exitosamente:', result.insertId);
       res.status(201).json({
         success: true,
         message: 'Cita creada exitosamente',
-        cita_id: result.insertId
+        data: {
+          cita_id: result.insertId,
+          ...nuevaCita
+        }
       });
-    });
+    } catch (err) {
+      console.error('❌ Error creando cita:', err);
+      return res.status(500).json({
+        success: false,
+        error: 'Error interno del servidor'
+      });
+    }
 
   } catch (error) {
     console.error('❌ Error en crearCita:', error);
@@ -109,25 +111,16 @@ exports.crearCita = async (req, res) => {
 };
 
 // Obtener todas las citas
-exports.obtenerCitas = async (req, res) => {
+const obtenerCitas = async (req, res) => {
   try {
     console.log('📅 Obteniendo todas las citas...');
 
-    Cita.obtenerTodas((err, results) => {
-      if (err) {
-        console.error('❌ Error obteniendo citas:', err);
-        return res.status(500).json({
-          success: false,
-          error: 'Error interno del servidor'
-        });
-      }
-
-      console.log(`✅ ${results.length} citas obtenidas`);
-      res.json({
-        success: true,
-        data: results,
-        total: results.length
-      });
+    const results = await Cita.obtenerTodas();
+    console.log(`✅ ${results.length} citas obtenidas`);
+    res.json({
+      success: true,
+      data: results,
+      total: results.length
     });
 
   } catch (error) {
@@ -140,32 +133,23 @@ exports.obtenerCitas = async (req, res) => {
 };
 
 // Obtener cita por ID
-exports.obtenerCitaPorId = async (req, res) => {
+const obtenerCitaPorId = async (req, res) => {
   try {
     const { id } = req.params;
     console.log(`📅 Obteniendo cita ID: ${id}`);
 
-    Cita.obtenerPorId(id, (err, results) => {
-      if (err) {
-        console.error('❌ Error obteniendo cita:', err);
-        return res.status(500).json({
-          success: false,
-          error: 'Error interno del servidor'
-        });
-      }
-
-      if (results.length === 0) {
-        return res.status(404).json({
-          success: false,
-          error: 'Cita no encontrada'
-        });
-      }
-
-      console.log('✅ Cita obtenida exitosamente');
-      res.json({
-        success: true,
-        data: results[0]
+    const result = await Cita.obtenerPorId(id);
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        error: 'Cita no encontrada'
       });
+    }
+
+    console.log('✅ Cita obtenida exitosamente');
+    res.json({
+      success: true,
+      data: result
     });
 
   } catch (error) {
@@ -178,43 +162,24 @@ exports.obtenerCitaPorId = async (req, res) => {
 };
 
 // Actualizar cita
-exports.actualizarCita = async (req, res) => {
+const actualizarCita = async (req, res) => {
   try {
     const { id } = req.params;
     console.log(`📅 Actualizando cita ID: ${id}`);
 
-    Cita.obtenerPorId(id, (err, results) => {
-      if (err) {
-        console.error('❌ Error verificando cita:', err);
-        return res.status(500).json({
-          success: false,
-          error: 'Error interno del servidor'
-        });
-      }
-
-      if (results.length === 0) {
-        return res.status(404).json({
-          success: false,
-          error: 'Cita no encontrada'
-        });
-      }
-
-      // Actualizar la cita
-      Cita.actualizar(id, req.body, (err, result) => {
-        if (err) {
-          console.error('❌ Error actualizando cita:', err);
-          return res.status(500).json({
-            success: false,
-            error: 'Error interno del servidor'
-          });
-        }
-
-        console.log('✅ Cita actualizada exitosamente');
-        res.json({
-          success: true,
-          message: 'Cita actualizada exitosamente'
-        });
+    const existingCita = await Cita.obtenerPorId(id);
+    if (!existingCita) {
+      return res.status(404).json({
+        success: false,
+        error: 'Cita no encontrada'
       });
+    }
+
+    const result = await Cita.actualizar(id, req.body);
+    console.log('✅ Cita actualizada exitosamente');
+    res.json({
+      success: true,
+      message: 'Cita actualizada exitosamente'
     });
 
   } catch (error) {
@@ -227,32 +192,23 @@ exports.actualizarCita = async (req, res) => {
 };
 
 // Eliminar cita (borrado lógico)
-exports.eliminarCita = async (req, res) => {
+const eliminarCita = async (req, res) => {
   try {
     const { id } = req.params;
     console.log(`📅 Eliminando cita ID: ${id}`);
 
-    Cita.eliminar(id, (err, result) => {
-      if (err) {
-        console.error('❌ Error eliminando cita:', err);
-        return res.status(500).json({
-          success: false,
-          error: 'Error interno del servidor'
-        });
-      }
-
-      if (result.affectedRows === 0) {
-        return res.status(404).json({
-          success: false,
-          error: 'Cita no encontrada'
-        });
-      }
-
-      console.log('✅ Cita eliminada exitosamente');
-      res.json({
-        success: true,
-        message: 'Cita eliminada exitosamente'
+    const result = await Cita.eliminar(id);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'Cita no encontrada'
       });
+    }
+
+    console.log('✅ Cita eliminada exitosamente');
+    res.json({
+      success: true,
+      message: 'Cita eliminada exitosamente'
     });
 
   } catch (error) {
@@ -265,24 +221,15 @@ exports.eliminarCita = async (req, res) => {
 };
 
 // Obtener estadísticas de citas
-exports.obtenerEstadisticas = async (req, res) => {
+const obtenerEstadisticas = async (req, res) => {
   try {
     console.log('📊 Obteniendo estadísticas de citas...');
 
-    Cita.obtenerEstadisticas((err, results) => {
-      if (err) {
-        console.error('❌ Error obteniendo estadísticas:', err);
-        return res.status(500).json({
-          success: false,
-          error: 'Error interno del servidor'
-        });
-      }
-
-      console.log('✅ Estadísticas obtenidas exitosamente');
-      res.json({
-        success: true,
-        data: results[0]
-      });
+    const results = await Cita.obtenerEstadisticas();
+    console.log('✅ Estadísticas obtenidas exitosamente');
+    res.json({
+      success: true,
+      data: results
     });
 
   } catch (error) {
@@ -295,26 +242,17 @@ exports.obtenerEstadisticas = async (req, res) => {
 };
 
 // Obtener citas por fecha
-exports.obtenerCitasPorFecha = async (req, res) => {
+const obtenerCitasPorFecha = async (req, res) => {
   try {
     const { fecha } = req.params;
     console.log(`📅 Obteniendo citas para la fecha: ${fecha}`);
 
-    Cita.obtenerPorFecha(fecha, (err, results) => {
-      if (err) {
-        console.error('❌ Error obteniendo citas por fecha:', err);
-        return res.status(500).json({
-          success: false,
-          error: 'Error interno del servidor'
-        });
-      }
-
-      console.log(`✅ ${results.length} citas obtenidas para ${fecha}`);
-      res.json({
-        success: true,
-        data: results,
-        total: results.length
-      });
+    const results = await Cita.obtenerPorFecha(fecha);
+    console.log(`✅ ${results.length} citas obtenidas para ${fecha}`);
+    res.json({
+      success: true,
+      data: results,
+      total: results.length
     });
 
   } catch (error) {
@@ -324,4 +262,15 @@ exports.obtenerCitasPorFecha = async (req, res) => {
       error: 'Error interno del servidor'
     });
   }
+};
+
+
+export default {
+  crearCita,
+  obtenerCitas,
+  obtenerCitaPorId,
+  actualizarCita,
+  eliminarCita,
+  obtenerEstadisticas,
+  obtenerCitasPorFecha
 };

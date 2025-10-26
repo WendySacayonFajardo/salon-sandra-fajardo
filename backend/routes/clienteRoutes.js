@@ -1,7 +1,7 @@
 // Rutas para gestión de clientes unificados
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const clienteController = require('../controllers/clienteController');
+import clienteController from '../controllers/clienteController.js';
 
 // GET /api/clientes/unificados - Obtener todos los clientes unificados
 router.get('/unificados', clienteController.obtenerClientesUnificados);
@@ -21,4 +21,4 @@ router.get('/analisis-retencion', clienteController.obtenerAnalisisRetencion);
 // GET /api/clientes/tendencias-mensuales - Obtener tendencias mensuales
 router.get('/tendencias-mensuales', clienteController.obtenerTendenciasClientesMensuales);
 
-module.exports = router;
+export default router;

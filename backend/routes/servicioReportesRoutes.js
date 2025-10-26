@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const ServicioReportesController = require('../controllers/servicioReportesController');
+import ServicioReportesController from '../controllers/servicioReportesController.js';
 
 // Rutas para reportes de servicios
 router.get('/estadisticas-generales', ServicioReportesController.obtenerEstadisticasGenerales);
@@ -9,4 +9,4 @@ router.get('/mensuales', ServicioReportesController.obtenerEstadisticasMensuales
 router.get('/mas-rentables', ServicioReportesController.obtenerServiciosMasRentables);
 router.get('/tendencias-diarias', ServicioReportesController.obtenerTendenciasDiarias);
 
-module.exports = router;
+export default router;

@@ -240,7 +240,8 @@ const enviarRespuestaError = (res, mensaje = 'Error en la operación', codigo = 
   });
 };
 
-module.exports = {
+export {
+
   manejarErrores,
   manejarRutasNoEncontradas,
   manejarMetodosNoPermitidos,
@@ -251,4 +252,5 @@ module.exports = {
   requerirAdmin,
   enviarRespuestaExito,
   enviarRespuestaError
+
 };
